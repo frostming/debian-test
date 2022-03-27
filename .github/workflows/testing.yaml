@@ -2,6 +2,9 @@ name: Test Install Scheme
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   install-scheme:

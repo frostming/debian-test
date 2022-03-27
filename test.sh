@@ -70,5 +70,5 @@ EOF
 
 "$pip" install -U --prefix myprefix click > /dev/null
 log "Installed click:"
-ls -l myprefix/lib/python*/
+find myprefix -name click -type d
 
