@@ -3,8 +3,8 @@
 set -eo pipefail
 
 python_version=$1
+use_pip=$2
 python="python${python_version}"
-pip="pip${python_version}"
 
 log() {
     local line="$1"
@@ -29,7 +29,8 @@ install_python() {
 
 install_pip() {
     # Install pip
-    if apt install -y "${python}-pip" > /dev/null; then
+    if [[ "$use_pip" == "system" ]]; then
+        apt install -y python3-pip > /dev/null
         echo "  Installed pip from apt"
     else
         apt install -y curl python3-distutils > /dev/null
@@ -47,13 +48,13 @@ log "Installed Python:"
 which "$python"
 $python --version
 
-if which "pip${python_version}" > /dev/null; then
-    echo "  $pip already installed"
+if which pip3 > /dev/null; then
+    echo "  pip3 already installed"
 else
     install_pip
 fi
 log "Installed pip:"
-"$pip" --version
+pip3 --version
 
 "$python" << EOF
 import sysconfig, distutils.sysconfig, site
@@ -68,7 +69,7 @@ print(distutils.sysconfig.get_python_lib())
 EOF
 
 
-"$pip" install -U --prefix myprefix click > /dev/null
+pip3 install -UI --prefix myprefix click > /dev/null
 log "Installed click:"
 find myprefix -name click -type d
 

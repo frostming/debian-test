@@ -14,16 +14,19 @@ jobs:
         # deadsnakes doesn't support debian, so we use ubuntu instead.
         base-image: ["ubuntu:focal", "debian:testing"]
         python-version: [3.9, "3.10"]
+        use_pip: [system, get-pip]
         include:
           - base-image: python:3.9-buster
             python-version: 3.9
+            use_pip: system
           - base-image: python:3.10-buster
             python-version: "3.10"
+            use_pip: system
     steps:
       - uses: actions/checkout@v2
       - name: Install schema
         run: |
           docker pull ${{ matrix.base-image }}
-          docker create --name=test-linux ${{ matrix.base-image }} /test.sh ${{ matrix.python-version }}
+          docker create --name=test-linux ${{ matrix.base-image }} /test.sh ${{ matrix.python-version }} ${{ matrix.use_pip }}
           docker cp test.sh test-linux:/
           docker start -a test-linux
