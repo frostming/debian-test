@@ -1,0 +1,25 @@
+name: Test Install Scheme
+
+on:
+  workflow_dispatch:
+
+jobs:
+  install-scheme:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        base-image: ["debian:buster", "debian:testing"]
+        python-version: [3.9, "3.10"]
+        include:
+          - base-image: python:3.9-buster
+            python-version: 3.9
+          - base-image: python:3.10-buster
+            python-version: "3.10"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install schema
+        run: |
+          docker pull ${{ matrix.base-image }}
+          docker create --name=test-linux ${{ matrix.base-image }} /test.sh ${{ matrix.python-version }}
+          docker cp test.sh test-linux:/
+          docker start test-linux
