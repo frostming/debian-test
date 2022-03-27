@@ -30,7 +30,7 @@ install_python() {
 install_pip() {
     # Install pip
     if [[ "$use_pip" == "system" ]]; then
-        apt install -y python3-pip > /dev/null
+        apt install -y python3-pip python3-distutils > /dev/null
         echo "  Installed pip from apt"
     else
         apt install -y curl python3-distutils > /dev/null
@@ -57,7 +57,7 @@ log "Installed pip:"
 pip3 --version
 
 "$python" << EOF
-import sysconfig, distutils.sysconfig, site
+import sysconfig, site
 from pprint import pprint
 
 print("- sysconfig.get_paths():")
@@ -65,7 +65,11 @@ pprint(sysconfig.get_paths())
 print("\n- site.getsitepackages():")
 print(site.getsitepackages())
 print("\n- distutils.sysconfig.get_python_lib():")
-print(distutils.sysconfig.get_python_lib())
+try:
+    import distutils.sysconfig
+    print(distutils.sysconfig.get_python_lib())
+except ImportError:
+    print("distutils.sysconfig not available")
 EOF
 
 
