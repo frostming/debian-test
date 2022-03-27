@@ -22,4 +22,4 @@ jobs:
           docker pull ${{ matrix.base-image }}
           docker create --name=test-linux ${{ matrix.base-image }} /test.sh ${{ matrix.python-version }}
           docker cp test.sh test-linux:/
-          docker start test-linux
+          docker start -a test-linux
