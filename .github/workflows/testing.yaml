@@ -10,6 +10,7 @@ jobs:
   install-scheme:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         # deadsnakes doesn't support debian, so we use ubuntu instead.
         base-image: ["ubuntu:focal", "debian:testing"]
