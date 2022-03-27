@@ -32,7 +32,7 @@ install_pip() {
     if apt install -y "${python}-pip" > /dev/null; then
         echo "  Installed pip from apt"
     else
-        apt install -y curl > /dev/null
+        apt install -y curl python3-distutils > /dev/null
         curl https://bootstrap.pypa.io/get-pip.py | "$python" - > /dev/null
         echo "  Installed pip from script"
     fi
